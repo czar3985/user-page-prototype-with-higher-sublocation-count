@@ -15,13 +15,13 @@ describe('EditUserProfileService', () => {
     it('searches locations with typed query params', () => {
         service.searchLocations({
             clientId: 'client-1',
-            type: 'all',
             searchString: 'pri',
             skip: 0,
             take: 20
         }).subscribe();
-        const req = http.expectOne((r) => r.url === '/api/locations' && r.params.get('client') === 'client-1' && r.params.get('type') === 'all');
+        const req = http.expectOne((r) => r.url === '/api/locations' && r.params.get('client') === 'client-1');
         expect(req.request.method).toBe('GET');
+        expect(req.request.params.has('type')).toBeFalse();
         req.flush({data: [], skipCount: 0, startIndex: 0, takeSize: 20, totalCount: 0});
     });
     it('adds accessible location links', () => {
