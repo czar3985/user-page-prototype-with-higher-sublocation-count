@@ -1,7 +1,7 @@
 <div class="edit-profile-shell">
     <aside class="edit-profile-sidebar">
-        <button (click)="saveAndExit()" color="primary" mat-flat-button>Save & Exit</button>
-        <button (click)="discardAndExit()" color="warn" mat-stroked-button>Discard & Exit</button>
+        <button (click)="saveAndExit()" class="save-btn" color="primary" mat-flat-button>Save & Exit</button>
+        <button (click)="discardAndExit()" class="discard-btn" color="warn" mat-stroked-button>Discard & Exit</button>
     </aside>
     @if (state$ | async; as state) {
         <main class="edit-profile-content">

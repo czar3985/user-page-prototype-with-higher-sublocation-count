@@ -13,6 +13,27 @@
   height: 100vh;
   padding: 24px;
   background: #0f172a;
+
+  /* Save & Exit — solid blue button */
+  .save-btn {
+    background-color: #1d4ed8;
+    color: #ffffff;
+    border: none;
+
+    &:hover {
+      background-color: #1e40af;
+    }
+  }
+
+  /* Discard & Exit — outlined red button */
+  .discard-btn {
+    color: #f87171;
+    border-color: #f87171;
+
+    &:hover {
+      background-color: rgba(248, 113, 113, 0.12);
+    }
+  }
 }
 
 .edit-profile-content {
