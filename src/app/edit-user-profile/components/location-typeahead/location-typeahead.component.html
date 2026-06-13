@@ -10,6 +10,7 @@
             <mat-option [value]="option" class="location-option">
                 @if (selectableWithCheckbox) {
                     <mat-checkbox (change)="optionToggled.emit({ option, linked: $event.checked })" (click)="$event.stopPropagation()"
+                                  (keydown)="$event.stopPropagation()"
                                   [checked]="option.isLinkedToUser"/>
                 }
                 <div class="location-option__content"><strong>{{ option.name }}</strong>@if (getDescription(option)) {
