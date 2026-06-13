@@ -11,7 +11,7 @@ import {
     AccessibleLocationsTableComponent
 } from '../../components/accessible-locations-table/accessible-locations-table.component';
 import {LocationTypeaheadComponent} from '../../components/location-typeahead/location-typeahead.component';
-import {LocationSearchItem, UpdateUserProfileRequest} from '../../models/edit-user-profile.models';
+import {PrimaryLocationSearchItem, UpdateUserProfileRequest} from '../../models/edit-user-profile.models';
 import {EditUserProfileFacade} from '../../services/edit-user-profile-facade.service';
 
 @Component({
@@ -66,7 +66,7 @@ export class EditUserProfilePageComponent implements OnInit {
         void this.router.navigateByUrl('/');
     }
 
-    selectPrimaryLocation(option: LocationSearchItem): void {
+    selectPrimaryLocation(option: PrimaryLocationSearchItem): void {
         this.form.patchValue({primaryLocationId: option.id, primaryLocationSearch: option.name});
     }
 }

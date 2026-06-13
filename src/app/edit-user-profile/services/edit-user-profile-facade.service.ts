@@ -14,7 +14,7 @@ import {
     switchMap,
     tap
 } from 'rxjs';
-import {EditUserProfileState, LocationSearchItem, UpdateUserProfileRequest} from '../models/edit-user-profile.models';
+import {EditUserProfileState, LocationSearchItem, PrimaryLocationSearchItem, UpdateUserProfileRequest} from '../models/edit-user-profile.models';
 import {
     MOCK_ACCESSIBLE_LOCATION_SEARCH,
     getMockGroupedLocations,
@@ -94,24 +94,22 @@ export class EditUserProfileFacade {
 
     private searchPrimary(searchString: string, skip: number, take: number): Observable<unknown> {
         const clientId = this.stateSubject.value.user?.clientId ?? MOCK_USER_PROFILE.clientId;
-        return this.api.searchLocations({
-            clientId,
-            type: 'primarylocation',
-            searchString,
-            skip,
-            take
-        }).pipe(catchError(() => of(MOCK_PRIMARY_LOCATION_SEARCH)), tap((response) => this.patch({primaryLocationOptions: this.mergeOptions(this.stateSubject.value.primaryLocationOptions, response.data, skip)})));
+        return this.api.searchPrimaryLocations({clientId, searchString, skip, take})
+            .pipe(catchError(() => of(MOCK_PRIMARY_LOCATION_SEARCH)), tap((response) => this.patch({primaryLocationOptions: this.mergePrimaryOptions(this.stateSubject.value.primaryLocationOptions, response.data, skip)})));
     }
 
     private searchAccessible(searchString: string, skip: number, take: number): Observable<unknown> {
         const clientId = this.stateSubject.value.user?.clientId ?? MOCK_USER_PROFILE.clientId;
         return this.api.searchLocations({
             clientId,
-            type: 'all',
             searchString,
             skip,
             take
         }).pipe(catchError(() => of(MOCK_ACCESSIBLE_LOCATION_SEARCH)), tap((response) => this.patch({accessibleLocationOptions: this.mergeOptions(this.stateSubject.value.accessibleLocationOptions, response.data, skip)})));
+    }
+
+    private mergePrimaryOptions(existing: PrimaryLocationSearchItem[], incoming: PrimaryLocationSearchItem[], skip: number): PrimaryLocationSearchItem[] {
+        return skip === 0 ? incoming : [...existing, ...incoming];
     }
 
     private mergeOptions(existing: LocationSearchItem[], incoming: LocationSearchItem[], skip: number): LocationSearchItem[] {

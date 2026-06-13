@@ -1,4 +1,4 @@
-import {GroupedLocationsResponse, LocationSearchResponse, UserProfile} from '../models/edit-user-profile.models';
+import {GroupedLocationsResponse, LocationSearchResponse, PrimaryLocationSearchResponse, UserProfile} from '../models/edit-user-profile.models';
 
 export const MOCK_USER_PROFILE: UserProfile = {
     id: '9c0a801d-82fa-43e7-a5f9-316ceefb2001',
@@ -131,55 +131,31 @@ export function getMockGroupedLocations(pageIndex: number, pageSize: number): Gr
 }
 
 export const MOCK_GROUPED_LOCATIONS: GroupedLocationsResponse = getMockGroupedLocations(0, 5);
-export const MOCK_PRIMARY_LOCATION_SEARCH: LocationSearchResponse = {
+export const MOCK_PRIMARY_LOCATION_SEARCH: PrimaryLocationSearchResponse = {
     data: [{
         id: '10000000-0000-0000-0000-000000000001',
-        name: 'Primary Location A',
-        parentLocationId: null,
-        parentLocationName: null,
-        sublocations: null
+        name: 'Primary Location A'
     }, {
         id: '10000000-0000-0000-0000-000000000002',
-        name: 'Primary Location B',
-        parentLocationId: null,
-        parentLocationName: null,
-        sublocations: null
+        name: 'Primary Location B'
     }, {
         id: '10000000-0000-0000-0000-000000000003',
-        name: 'Primary Location C',
-        parentLocationId: null,
-        parentLocationName: null,
-        sublocations: null
+        name: 'Primary Location C'
     }, {
         id: '10000000-0000-0000-0000-000000000004',
-        name: 'Primary Location D',
-        parentLocationId: null,
-        parentLocationName: null,
-        sublocations: null
+        name: 'Primary Location D'
     }, {
         id: '10000000-0000-0000-0000-000000000005',
-        name: 'Primary Location E',
-        parentLocationId: null,
-        parentLocationName: null,
-        sublocations: null
+        name: 'Primary Location E'
     }, {
         id: '10000000-0000-0000-0000-000000000006',
-        name: 'Primary Location F',
-        parentLocationId: null,
-        parentLocationName: null,
-        sublocations: null
+        name: 'Primary Location F'
     }, {
         id: '10000000-0000-0000-0000-000000000007',
-        name: 'Primary Location G',
-        parentLocationId: null,
-        parentLocationName: null,
-        sublocations: null
+        name: 'Primary Location G'
     }, {
         id: '10000000-0000-0000-0000-000000000008',
-        name: 'Primary Location H',
-        parentLocationId: null,
-        parentLocationName: null,
-        sublocations: null
+        name: 'Primary Location H'
     }], skipCount: 0, startIndex: 0, takeSize: 20, totalCount: 8
 };
 export const MOCK_ACCESSIBLE_LOCATION_SEARCH: LocationSearchResponse = {

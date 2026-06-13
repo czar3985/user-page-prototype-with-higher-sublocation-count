@@ -5,6 +5,8 @@ import {
     GroupedLocationsResponse,
     LocationSearchRequest,
     LocationSearchResponse,
+    PrimaryLocationSearchRequest,
+    PrimaryLocationSearchResponse,
     ToggleAccessibleLocationRequest,
     UpdateUserProfileRequest,
     UserProfile
@@ -23,8 +25,13 @@ export class EditUserProfileService {
         return this.http.put<UserProfile>(`/users/${userId}`, request);
     }
 
+    searchPrimaryLocations(request: PrimaryLocationSearchRequest): Observable<PrimaryLocationSearchResponse> {
+        const params = new HttpParams().set('client', request.clientId).set('searchString', request.searchString).set('skip', request.skip).set('take', request.take);
+        return this.http.get<PrimaryLocationSearchResponse>('/api/locations/primary', {params});
+    }
+
     searchLocations(request: LocationSearchRequest): Observable<LocationSearchResponse> {
-        const params = new HttpParams().set('client', request.clientId).set('type', request.type).set('searchString', request.searchString).set('skip', request.skip).set('take', request.take);
+        const params = new HttpParams().set('client', request.clientId).set('searchString', request.searchString).set('skip', request.skip).set('take', request.take);
         return this.http.get<LocationSearchResponse>('/api/locations', {params});
     }
 

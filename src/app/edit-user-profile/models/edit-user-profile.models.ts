@@ -1,5 +1,3 @@
-export type LocationSearchType = 'all' | 'primarylocation' | 'sublocation';
-
 export interface UserProfile {
     id: string;
     clientId: string;
@@ -19,10 +17,24 @@ export interface UpdateUserProfileRequest {
 
 export interface LocationSearchRequest {
     clientId: string;
-    type: LocationSearchType;
     searchString: string;
     skip: number;
     take: number;
+}
+
+export interface PrimaryLocationSearchRequest {
+    clientId: string;
+    searchString: string;
+    skip: number;
+    take: number;
+}
+
+export interface PrimaryLocationSearchResponse {
+    data: PrimaryLocationSearchItem[];
+    skipCount: number;
+    startIndex: number;
+    takeSize: number;
+    totalCount: number;
 }
 
 export interface LocationSearchResponse {
@@ -33,9 +45,12 @@ export interface LocationSearchResponse {
     totalCount: number;
 }
 
-export interface LocationSearchItem {
+export interface PrimaryLocationSearchItem {
     id: string;
     name: string;
+}
+
+export interface LocationSearchItem extends PrimaryLocationSearchItem {
     parentLocationId: string | null;
     parentLocationName: string | null;
     sublocations: LocationSearchSublocation[] | null;
@@ -74,7 +89,7 @@ export interface GroupedSublocation {
 export interface EditUserProfileState {
     user: UserProfile | null;
     groupedLocations: GroupedLocationsResponse | null;
-    primaryLocationOptions: LocationSearchItem[];
+    primaryLocationOptions: PrimaryLocationSearchItem[];
     accessibleLocationOptions: LocationSearchItem[];
     loading: boolean;
     saving: boolean;
