@@ -1,4 +1,24 @@
-.location-typeahead { width: 100%; }
-.location-option { min-height: 64px; }
-.location-option__content { display: inline-flex; flex-direction: column; gap: 2px; margin-left: 8px; vertical-align: middle; }
-.location-option__content small { color: #64748b; font-size: 12px; }
+.location-typeahead {
+  width: 100%;
+}
+
+.location-option {
+  min-height: 64px;
+}
+
+.location-option__content {
+  display: inline-flex;
+  flex-direction: column;
+  gap: 2px;
+  margin-left: 8px;
+  vertical-align: middle;
+}
+
+.location-option__content small {
+  color: #64748b;
+  font-size: 12px;
+}
+
+.additional-hint {
+  font-style: italic;
+}
