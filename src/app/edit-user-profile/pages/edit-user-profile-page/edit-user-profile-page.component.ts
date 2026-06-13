@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { AsyncPipe, NgIf } from '@angular/common';
+import { AsyncPipe } from '@angular/common';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { filter, take } from 'rxjs';
@@ -12,7 +12,7 @@ import { LocationTypeaheadComponent } from '../../components/location-typeahead/
 import { LocationSearchItem, UpdateUserProfileRequest } from '../../models/edit-user-profile.models';
 import { EditUserProfileFacade } from '../../services/edit-user-profile-facade.service';
 
-@Component({ selector: 'app-edit-user-profile-page', imports: [NgIf, AsyncPipe, ReactiveFormsModule, MatButtonModule, MatCardModule, MatFormFieldModule, MatInputModule, LocationTypeaheadComponent, AccessibleLocationsTableComponent], templateUrl: './edit-user-profile-page.component.html', styleUrl: './edit-user-profile-page.component.scss', providers: [EditUserProfileFacade] })
+@Component({ selector: 'app-edit-user-profile-page', imports: [AsyncPipe, ReactiveFormsModule, MatButtonModule, MatCardModule, MatFormFieldModule, MatInputModule, LocationTypeaheadComponent, AccessibleLocationsTableComponent], templateUrl: './edit-user-profile-page.component.html', styleUrl: './edit-user-profile-page.component.scss', providers: [EditUserProfileFacade] })
 export class EditUserProfilePageComponent implements OnInit {
   readonly state$ = this.facade.state$;
   readonly title$ = this.facade.title$;

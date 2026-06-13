@@ -1,9 +1,11 @@
 <div class="edit-profile-shell">
   <aside class="edit-profile-sidebar"><button mat-flat-button color="primary" (click)="saveAndExit()">Save & Exit</button><button mat-stroked-button color="warn" (click)="discardAndExit()">Discard & Exit</button></aside>
-  <main class="edit-profile-content" *ngIf="state$ | async as state">
+  @if (state$ | async; as state) {
+  <main class="edit-profile-content">
     <h1>{{ title$ | async }}</h1>
     @if (state.error) { <mat-card class="error-card">{{ state.error }}</mat-card> }
     <mat-card><mat-card-title>Profile Details</mat-card-title><mat-card-content><form [formGroup]="form" class="profile-form"><mat-form-field appearance="outline"><mat-label>First Name</mat-label><input matInput formControlName="firstName" /></mat-form-field><mat-form-field appearance="outline"><mat-label>Last Name</mat-label><input matInput formControlName="lastName" /></mat-form-field><mat-form-field appearance="outline"><mat-label>Email</mat-label><input matInput formControlName="email" type="email" /></mat-form-field><app-location-typeahead label="Primary location" [control]="form.controls.primaryLocationSearch" [options]="state.primaryLocationOptions" (searchChanged)="facade.queuePrimarySearch($event)" (optionSelected)="selectPrimaryLocation($event)" /></form></mat-card-content></mat-card>
     <mat-card><mat-card-title>Accessible Locations</mat-card-title><mat-card-content><app-location-typeahead label="Search accessible locations" [control]="form.controls.accessibleLocationSearch" [options]="state.accessibleLocationOptions" [selectableWithCheckbox]="true" (searchChanged)="facade.queueAccessibleSearch($event)" (optionToggled)="facade.toggleAccessibleLocation($event.option.id, $event.linked)" /><app-accessible-locations-table [groupedLocations]="state.groupedLocations" (pageChanged)="facade.loadGroupedLocations($event.pageIndex, $event.pageSize)" (sublocationToggled)="facade.toggleAccessibleLocation($event.locationId, $event.linked)" /></mat-card-content></mat-card>
   </main>
+  }
 </div>
