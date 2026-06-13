@@ -14,5 +14,6 @@ import {GroupedLocationsResponse} from '../../models/edit-user-profile.models';
 export class AccessibleLocationsTableComponent {
     @Input() groupedLocations: GroupedLocationsResponse | null = null;
     @Output() pageChanged = new EventEmitter<PageEvent>();
+    @Output() locationToggled = new EventEmitter<{ locationId: string; linked: boolean }>();
     @Output() sublocationToggled = new EventEmitter<{ locationId: string; linked: boolean }>();
 }

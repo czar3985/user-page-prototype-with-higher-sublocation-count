@@ -19,6 +19,7 @@ export const MOCK_GROUPED_LOCATIONS: GroupedLocationsResponse = {
     data: [{
         id: '10000000-0000-0000-0000-000000000001',
         name: 'Primary Location A',
+        isLinkedToUser: true,
         sublocations: [{
             id: '20000000-0000-0000-0000-000000000011',
             name: 'Sub Location A1',
@@ -39,6 +40,7 @@ export const MOCK_GROUPED_LOCATIONS: GroupedLocationsResponse = {
     }, {
         id: '10000000-0000-0000-0000-000000000002',
         name: 'Primary Location B',
+        isLinkedToUser: false,
         sublocations: [{
             id: '20000000-0000-0000-0000-000000000021',
             name: 'Sub Location B1',
@@ -55,6 +57,7 @@ export const MOCK_GROUPED_LOCATIONS: GroupedLocationsResponse = {
     }, {
         id: '10000000-0000-0000-0000-000000000003',
         name: 'Primary Location C',
+        isLinkedToUser: true,
         sublocations: [{
             id: '20000000-0000-0000-0000-000000000031',
             name: 'Sub Location C1',
@@ -67,6 +70,7 @@ export const MOCK_GROUPED_LOCATIONS: GroupedLocationsResponse = {
     }, {
         id: '10000000-0000-0000-0000-000000000004',
         name: 'Primary Location D',
+        isLinkedToUser: true,
         sublocations: [{
             id: '20000000-0000-0000-0000-000000000041',
             name: 'Sub Location D1',
@@ -83,6 +87,7 @@ export const MOCK_GROUPED_LOCATIONS: GroupedLocationsResponse = {
     }, {
         id: '10000000-0000-0000-0000-000000000005',
         name: 'Primary Location E',
+        isLinkedToUser: false,
         sublocations: [{
             id: '20000000-0000-0000-0000-000000000051',
             name: 'Sub Location E1',

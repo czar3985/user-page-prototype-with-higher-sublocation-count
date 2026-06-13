@@ -38,7 +38,8 @@
                                             [selectableWithCheckbox]="true"
                                             additionalHint="A sub location can only be selected if the parent location is selected."
                                             label="Search accessible locations"/>
-                    <app-accessible-locations-table (pageChanged)="facade.loadGroupedLocations($event.pageIndex, $event.pageSize)"
+                    <app-accessible-locations-table (locationToggled)="facade.toggleAccessibleLocation($event.locationId, $event.linked)"
+                                                    (pageChanged)="facade.loadGroupedLocations($event.pageIndex, $event.pageSize)"
                                                     (sublocationToggled)="facade.toggleAccessibleLocation($event.locationId, $event.linked)"
                                                     [groupedLocations]="state.groupedLocations"/>
                 </mat-card-content>

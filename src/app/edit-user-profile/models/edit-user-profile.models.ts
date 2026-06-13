@@ -61,6 +61,7 @@ export interface GroupedLocationsResponse {
 export interface GroupedLocation {
     id: string;
     name: string;
+    isLinkedToUser: boolean;
     sublocations: GroupedSublocation[];
 }
 

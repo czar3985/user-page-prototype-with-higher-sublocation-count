@@ -1,7 +1,8 @@
 <div class="locations-table">
     @for (location of groupedLocations?.data ?? []; track location.id) {
         <div class="locations-table__parent">
-            <mat-checkbox checked disabled/>
+            <mat-checkbox (change)="locationToggled.emit({ locationId: location.id, linked: $event.checked })"
+                          [checked]="location.isLinkedToUser"/>
             <strong>{{ location.name }}</strong></div>
         @for (sub of location.sublocations; track sub.id) {
             <div class="locations-table__sub">
