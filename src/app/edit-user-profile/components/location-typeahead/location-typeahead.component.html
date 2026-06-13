@@ -1,0 +1,14 @@
+<mat-form-field appearance="outline" class="location-typeahead">
+  <mat-label>{{ label }}</mat-label>
+  <input matInput [formControl]="control" [matAutocomplete]="locationAutocomplete" (input)="onInput($any($event.target).value)" aria-describedby="typeaheadHint" />
+  <mat-icon matSuffix>search</mat-icon>
+  <mat-hint id="typeaheadHint">Type at least 3 characters to search. More results load as you scroll.</mat-hint>
+  <mat-autocomplete #locationAutocomplete="matAutocomplete" [displayWith]="displayLocation" (optionSelected)="onSelected($event)">
+    @for (option of options; track option.id) {
+      <mat-option [value]="option" class="location-option">
+        @if (selectableWithCheckbox) { <mat-checkbox [checked]="option.isLinkedToUser" (click)="$event.stopPropagation()" (change)="optionToggled.emit({ option, linked: $event.checked })" /> }
+        <div class="location-option__content"><strong>{{ option.name }}</strong>@if (getDescription(option)) { <small>{{ getDescription(option) }}</small> }</div>
+      </mat-option>
+    }
+  </mat-autocomplete>
+</mat-form-field>
