@@ -17,7 +17,7 @@ import {
 import {EditUserProfileState, LocationSearchItem, UpdateUserProfileRequest} from '../models/edit-user-profile.models';
 import {
     MOCK_ACCESSIBLE_LOCATION_SEARCH,
-    MOCK_GROUPED_LOCATIONS,
+    getMockGroupedLocations,
     MOCK_PRIMARY_LOCATION_SEARCH,
     MOCK_USER_PROFILE
 } from '../mocks/edit-user-profile.mock';
@@ -50,7 +50,7 @@ export class EditUserProfileFacade {
         this.patch({loading: true, error: null});
         combineLatest({
             user: this.api.getUserProfile(userId).pipe(catchError(() => of(MOCK_USER_PROFILE))),
-            groupedLocations: this.api.getGroupedLocations(userId, 0, 5).pipe(catchError(() => of(MOCK_GROUPED_LOCATIONS)))
+            groupedLocations: this.api.getGroupedLocations(userId, 0, 5).pipe(catchError(() => of(getMockGroupedLocations(0, 5))))
         })
             .pipe(finalize(() => this.patch({loading: false})))
             .subscribe(({user, groupedLocations}) => this.patch({user, groupedLocations}));
@@ -60,11 +60,7 @@ export class EditUserProfileFacade {
         const userId = this.stateSubject.value.user?.id;
         if (!userId) return;
         this.patch({loading: true});
-        this.api.getGroupedLocations(userId, pageIndex, pageSize).pipe(catchError(() => of({
-            ...MOCK_GROUPED_LOCATIONS,
-            pageIndex,
-            pageSize
-        })), finalize(() => this.patch({loading: false}))).subscribe((groupedLocations) => this.patch({groupedLocations}));
+        this.api.getGroupedLocations(userId, pageIndex, pageSize).pipe(catchError(() => of(getMockGroupedLocations(pageIndex, pageSize))), finalize(() => this.patch({loading: false}))).subscribe((groupedLocations) => this.patch({groupedLocations}));
     }
 
     queuePrimarySearch(searchString: string, skip = 0, take = 20): void {
