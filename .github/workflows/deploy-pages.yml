@@ -34,7 +34,7 @@ jobs:
         run: npm install
 
       - name: Build Angular app
-        run: npm run build -- --base-href /edit-user-page-prototype/
+        run: npm run build -- --base-href /user-page-prototype-with-higher-sublocation-count/
 
       - name: Add GitHub Pages SPA fallback
         run: |
