@@ -1,0 +1,19 @@
+<div #scrollContainer (scroll)="onScroll($event)" class="sublocations-scroll">
+    @for (sub of sublocationsState?.data ?? []; track sub.id) {
+        <div class="sublocation-row">
+            <mat-checkbox (change)="sublocationToggled.emit({locationId: sub.id, linked: $event.checked})"
+                          [checked]="sub.isLinkedToUser ?? false"/>
+            <span>{{ sub.name }}</span>
+        </div>
+    }
+    @if (sublocationsState?.loading) {
+        <div class="sublocation-row sublocation-row--loading">
+            <mat-spinner diameter="20"/>
+        </div>
+    }
+    @if (!sublocationsState?.loading && hasMore) {
+        <div class="sublocation-row sublocation-row--hint">
+            <span>Scroll to load more</span>
+        </div>
+    }
+</div>

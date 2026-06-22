@@ -54,6 +54,12 @@ h1 {
   gap: 16px;
 }
 
+.accessible-locations-card-content {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
 .error-card {
   color: #991b1b;
   background: #fee2e2;

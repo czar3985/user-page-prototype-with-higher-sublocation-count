@@ -1,4 +1,12 @@
-import {GroupedLocationsResponse, LocationSearchResponse, PrimaryLocationSearchResponse, UserProfile} from '../models/edit-user-profile.models';
+import {
+    GroupedLocationsResponse,
+    LocationChildrenResponse,
+    LocationChildrenResponseItem,
+    LocationSearchResponse,
+    PrimaryLocationSearchResponse,
+    UserParentLocationsResponse,
+    UserProfile
+} from '../models/edit-user-profile.models';
 
 export const MOCK_USER_PROFILE: UserProfile = {
     id: '9c0a801d-82fa-43e7-a5f9-316ceefb2001',
@@ -9,28 +17,25 @@ export const MOCK_USER_PROFILE: UserProfile = {
     primaryLocationId: '10000000-0000-0000-0000-000000000001',
     primaryLocationName: 'Primary Location A'
 };
-// Full pool of all locations (linked and unlinked) — used by getMockGroupedLocations
+
+function generateSubsA(): Array<{ id: string, name: string, isLinkedToUser: boolean }> {
+    const subs: Array<{ id: string, name: string, isLinkedToUser: boolean }> = [];
+    for (let i = 1; i <= 200; i++) {
+        const seq = String(i).padStart(3, '0');
+        subs.push({
+            id: `20a00000-0000-0000-0000-0000000000${seq}`,
+            name: `Sub Location A${i}`,
+            isLinkedToUser: i <= 2
+        });
+    }
+    return subs;
+}
+
 const ALL_MOCK_GROUPED_LOCATIONS = [{
     id: '10000000-0000-0000-0000-000000000001',
     name: 'Primary Location A',
     isLinkedToUser: true,
-    sublocations: [{
-        id: '20000000-0000-0000-0000-000000000011',
-        name: 'Sub Location A1',
-        isLinkedToUser: true
-    }, {
-        id: '20000000-0000-0000-0000-000000000012',
-        name: 'Sub Location A2',
-        isLinkedToUser: true
-    }, {
-        id: '20000000-0000-0000-0000-000000000013',
-        name: 'Sub Location A3',
-        isLinkedToUser: false
-    }, {
-        id: '20000000-0000-0000-0000-000000000014',
-        name: 'Sub Location A4',
-        isLinkedToUser: false
-    }]
+    sublocations: generateSubsA()
 }, {
     id: '10000000-0000-0000-0000-000000000002',
     name: 'Primary Location B',
@@ -112,7 +117,13 @@ const ALL_MOCK_GROUPED_LOCATIONS = [{
     }]
 }];
 
-// Only primary locations linked to the user appear in the table
+const MOCK_SUBLOCATIONS_POOL: Record<string, Array<{ id: string, name: string, isLinkedToUser: boolean }>> = {};
+ALL_MOCK_GROUPED_LOCATIONS.forEach(loc => {
+    if (loc.sublocations.length > 0) {
+        MOCK_SUBLOCATIONS_POOL[loc.id] = loc.sublocations;
+    }
+});
+
 export function getMockGroupedLocations(pageIndex: number, pageSize: number): GroupedLocationsResponse {
     const linked = ALL_MOCK_GROUPED_LOCATIONS.filter(l => l.isLinkedToUser);
     const start = pageIndex * pageSize;
@@ -130,7 +141,37 @@ export function getMockGroupedLocations(pageIndex: number, pageSize: number): Gr
     };
 }
 
+export function getMockUserParentLocations(pageIndex: number, pageSize: number): UserParentLocationsResponse {
+    const linked = ALL_MOCK_GROUPED_LOCATIONS.filter(l => l.isLinkedToUser);
+    const start = pageIndex * pageSize;
+    const data = linked.slice(start, start + pageSize).map(l => ({id: l.id, name: l.name}));
+    const totalCount = linked.length;
+    const totalPages = Math.ceil(totalCount / pageSize);
+    return {
+        data,
+        pageIndex,
+        pageSize,
+        totalCount,
+        totalPages,
+        hasNextPage: pageIndex < totalPages - 1,
+        hasPreviousPage: pageIndex > 0
+    };
+}
+
+export function getMockLocationSublocations(locationId: string, skip: number, take: number): LocationChildrenResponse {
+    const all = MOCK_SUBLOCATIONS_POOL[locationId] ?? [];
+    const slice: LocationChildrenResponseItem[] = all.slice(skip, skip + take);
+    return {
+        data: slice,
+        skipCount: skip,
+        startIndex: skip,
+        takeSize: take,
+        totalCount: all.length
+    };
+}
+
 export const MOCK_GROUPED_LOCATIONS: GroupedLocationsResponse = getMockGroupedLocations(0, 5);
+export const MOCK_USER_PARENT_LOCATIONS: UserParentLocationsResponse = getMockUserParentLocations(0, 5);
 export const MOCK_PRIMARY_LOCATION_SEARCH: PrimaryLocationSearchResponse = {
     data: [{
         id: '10000000-0000-0000-0000-000000000001',
@@ -165,23 +206,7 @@ export const MOCK_ACCESSIBLE_LOCATION_SEARCH: LocationSearchResponse = {
         parentLocationId: null,
         parentLocationName: null,
         isLinkedToUser: true,
-        sublocations: [{
-            id: '20000000-0000-0000-0000-000000000011',
-            name: 'Sub Location A1',
-            isLinkedToUser: true
-        }, {
-            id: '20000000-0000-0000-0000-000000000012',
-            name: 'Sub Location A2',
-            isLinkedToUser: true
-        }, {
-            id: '20000000-0000-0000-0000-000000000013',
-            name: 'Sub Location A3',
-            isLinkedToUser: false
-        }, {
-            id: '20000000-0000-0000-0000-000000000014',
-            name: 'Sub Location A4',
-            isLinkedToUser: false
-        }]
+        sublocations: generateSubsA()
     }, {
         id: '10000000-0000-0000-0000-000000000002',
         name: 'Primary Location B',

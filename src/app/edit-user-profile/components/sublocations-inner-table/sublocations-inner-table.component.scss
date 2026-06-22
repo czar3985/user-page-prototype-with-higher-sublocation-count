@@ -1,0 +1,24 @@
+.sublocations-scroll {
+  max-height: 240px;
+  overflow-y: auto;
+  border-top: 1px solid #e5edf7;
+}
+
+.sublocation-row {
+  display: flex;
+  align-items: center;
+  min-height: 48px;
+  gap: 8px;
+  padding: 0 16px 0 56px;
+  border-bottom: 1px solid #e5edf7;
+  background: #fff;
+}
+
+.sublocation-row--loading,
+.sublocation-row--hint {
+  justify-content: center;
+  color: #888;
+  font-size: 12px;
+  padding: 8px 16px;
+  min-height: 36px;
+}
