@@ -14,18 +14,28 @@ import {
     switchMap,
     tap
 } from 'rxjs';
-import {EditUserProfileState, LocationSearchItem, PrimaryLocationSearchItem, UpdateUserProfileRequest} from '../models/edit-user-profile.models';
 import {
+    EditUserProfileState,
+    LocationChildrenResponseItem,
+    LocationSearchItem,
+    PrimaryLocationSearchItem,
+    SublocationsState,
+    UpdateUserProfileRequest
+} from '../models/edit-user-profile.models';
+import {
+    getMockLocationSublocations,
+    getMockUserParentLocations,
     MOCK_ACCESSIBLE_LOCATION_SEARCH,
-    getMockGroupedLocations,
     MOCK_PRIMARY_LOCATION_SEARCH,
+    MOCK_USER_PARENT_LOCATIONS,
     MOCK_USER_PROFILE
 } from '../mocks/edit-user-profile.mock';
 import {EditUserProfileService} from './edit-user-profile.service';
 
 const initialState: EditUserProfileState = {
     user: null,
-    groupedLocations: null,
+    userParentLocations: null,
+    sublocationsMap: {},
     primaryLocationOptions: [],
     accessibleLocationOptions: [],
     loading: false,
@@ -50,17 +60,40 @@ export class EditUserProfileFacade {
         this.patch({loading: true, error: null});
         combineLatest({
             user: this.api.getUserProfile(userId).pipe(catchError(() => of(MOCK_USER_PROFILE))),
-            groupedLocations: this.api.getGroupedLocations(userId, 0, 5).pipe(catchError(() => of(getMockGroupedLocations(0, 5))))
+            userParentLocations: this.api.getUserParentLocations(userId, 0, 5).pipe(catchError(() => of(MOCK_USER_PARENT_LOCATIONS)))
         })
             .pipe(finalize(() => this.patch({loading: false})))
-            .subscribe(({user, groupedLocations}) => this.patch({user, groupedLocations}));
+            .subscribe(({user, userParentLocations}) => this.patch({user, userParentLocations}));
     }
 
-    loadGroupedLocations(pageIndex: number, pageSize: number): void {
+    loadUserParentLocations(pageIndex: number, pageSize: number): void {
         const userId = this.stateSubject.value.user?.id;
         if (!userId) return;
         this.patch({loading: true});
-        this.api.getGroupedLocations(userId, pageIndex, pageSize).pipe(catchError(() => of(getMockGroupedLocations(pageIndex, pageSize))), finalize(() => this.patch({loading: false}))).subscribe((groupedLocations) => this.patch({groupedLocations}));
+        this.api.getUserParentLocations(userId, pageIndex, pageSize)
+            .pipe(catchError(() => of(getMockUserParentLocations(pageIndex, pageSize))), finalize(() => this.patch({loading: false})))
+            .subscribe((userParentLocations) => this.patch({userParentLocations, sublocationsMap: {}}));
+    }
+
+    loadSublocations(locationId: string, skip: number, take: number): void {
+        const current = this.stateSubject.value.sublocationsMap[locationId];
+        this.patchSublocations(locationId, {...(current ?? {data: [], totalCount: 0}), loading: true});
+        this.api.getLocationSublocations(locationId, skip, take)
+            .pipe(
+                catchError(() => of(getMockLocationSublocations(locationId, skip, take))),
+                finalize(() => this.patchSublocations(locationId, {
+                    ...(this.stateSubject.value.sublocationsMap[locationId] ?? {data: [], totalCount: 0}),
+                    loading: false
+                }))
+            )
+            .subscribe((response) => {
+                const existing: LocationChildrenResponseItem[] = skip > 0 ? (this.stateSubject.value.sublocationsMap[locationId]?.data ?? []) : [];
+                this.patchSublocations(locationId, {
+                    data: [...existing, ...response.data],
+                    totalCount: response.totalCount,
+                    loading: false
+                });
+            });
     }
 
     queuePrimarySearch(searchString: string, skip = 0, take = 20): void {
@@ -89,7 +122,10 @@ export class EditUserProfileFacade {
         call$.pipe(catchError(() => {
             this.patch({error: 'Unable to update accessible location.'});
             return EMPTY;
-        })).subscribe(() => this.loadGroupedLocations(this.stateSubject.value.groupedLocations?.pageIndex ?? 0, this.stateSubject.value.groupedLocations?.pageSize ?? 5));
+        })).subscribe(() => this.loadUserParentLocations(
+            this.stateSubject.value.userParentLocations?.pageIndex ?? 0,
+            this.stateSubject.value.userParentLocations?.pageSize ?? 5
+        ));
     }
 
     private searchPrimary(searchString: string, skip: number, take: number): Observable<unknown> {
@@ -114,6 +150,10 @@ export class EditUserProfileFacade {
 
     private mergeOptions(existing: LocationSearchItem[], incoming: LocationSearchItem[], skip: number): LocationSearchItem[] {
         return skip === 0 ? incoming : [...existing, ...incoming];
+    }
+
+    private patchSublocations(locationId: string, state: SublocationsState): void {
+        this.patch({sublocationsMap: {...this.stateSubject.value.sublocationsMap, [locationId]: state}});
     }
 
     private patch(partial: Partial<EditUserProfileState>): void {

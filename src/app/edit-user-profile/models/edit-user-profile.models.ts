@@ -86,9 +86,45 @@ export interface GroupedSublocation {
     isLinkedToUser: boolean;
 }
 
+export interface UserParentLocationsResponse {
+    data: UserParentLocationsResponseItem[];
+    hasNextPage: boolean;
+    hasPreviousPage: boolean;
+    pageIndex: number;
+    pageSize: number;
+    totalCount: number;
+    totalPages: number;
+}
+
+export interface UserParentLocationsResponseItem {
+    id: string;
+    name: string;
+}
+
+export interface LocationChildrenResponse {
+    data: LocationChildrenResponseItem[];
+    skipCount: number;
+    startIndex: number;
+    takeSize: number;
+    totalCount: number;
+}
+
+export interface LocationChildrenResponseItem {
+    id: string;
+    name: string;
+    isLinkedToUser?: boolean;
+}
+
+export interface SublocationsState {
+    data: LocationChildrenResponseItem[];
+    totalCount: number;
+    loading: boolean;
+}
+
 export interface EditUserProfileState {
     user: UserProfile | null;
-    groupedLocations: GroupedLocationsResponse | null;
+    userParentLocations: UserParentLocationsResponse | null;
+    sublocationsMap: Record<string, SublocationsState>;
     primaryLocationOptions: PrimaryLocationSearchItem[];
     accessibleLocationOptions: LocationSearchItem[];
     loading: boolean;

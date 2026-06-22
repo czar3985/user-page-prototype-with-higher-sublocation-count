@@ -2,19 +2,27 @@ import {ComponentFixture, TestBed} from '@angular/core/testing';
 import {of} from 'rxjs';
 import {ActivatedRoute, Router} from '@angular/router';
 import {EditUserProfileModule} from '../../edit-user-profile.module';
-import {MOCK_GROUPED_LOCATIONS, MOCK_USER_PROFILE} from '../../mocks/edit-user-profile.mock';
+import {MOCK_USER_PARENT_LOCATIONS, MOCK_USER_PROFILE} from '../../mocks/edit-user-profile.mock';
 import {EditUserProfileService} from '../../services/edit-user-profile.service';
 import {EditUserProfilePageComponent} from './edit-user-profile-page.component';
 
 describe('EditUserProfilePageComponent', () => {
     let fixture: ComponentFixture<EditUserProfilePageComponent>;
-    const api = jasmine.createSpyObj('EditUserProfileService', ['getUserProfile', 'getGroupedLocations', 'updateUserProfile', 'searchLocations']);
+    const api = jasmine.createSpyObj('EditUserProfileService', ['getUserProfile', 'getUserParentLocations', 'getLocationSublocations', 'updateUserProfile', 'searchLocations']);
     beforeEach(async () => {
         api.getUserProfile.and.returnValue(of(MOCK_USER_PROFILE));
-        api.getGroupedLocations.and.returnValue(of(MOCK_GROUPED_LOCATIONS));
+        api.getUserParentLocations.and.returnValue(of(MOCK_USER_PARENT_LOCATIONS));
+        api.getLocationSublocations.and.returnValue(of({
+            data: [],
+            skipCount: 0,
+            startIndex: 0,
+            takeSize: 5,
+            totalCount: 0
+        }));
         api.updateUserProfile.and.returnValue(of(MOCK_USER_PROFILE));
         api.searchLocations.and.returnValue(of({data: [], skipCount: 0, startIndex: 0, takeSize: 20, totalCount: 0}));
-        await TestBed.configureTestingModule({imports: [EditUserProfileModule],
+        await TestBed.configureTestingModule({
+            imports: [EditUserProfileModule],
             providers: [{provide: EditUserProfileService, useValue: api}, {
                 provide: ActivatedRoute,
                 useValue: {snapshot: {paramMap: {get: () => MOCK_USER_PROFILE.id}}}

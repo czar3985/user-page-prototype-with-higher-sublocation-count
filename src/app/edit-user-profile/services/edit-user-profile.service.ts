@@ -3,12 +3,14 @@ import {Injectable} from '@angular/core';
 import {Observable} from 'rxjs';
 import {
     GroupedLocationsResponse,
+    LocationChildrenResponse,
     LocationSearchRequest,
     LocationSearchResponse,
     PrimaryLocationSearchRequest,
     PrimaryLocationSearchResponse,
     ToggleAccessibleLocationRequest,
     UpdateUserProfileRequest,
+    UserParentLocationsResponse,
     UserProfile
 } from '../models/edit-user-profile.models';
 
@@ -37,6 +39,14 @@ export class EditUserProfileService {
 
     getGroupedLocations(userId: string, pageIndex: number, pageSize: number): Observable<GroupedLocationsResponse> {
         return this.http.get<GroupedLocationsResponse>(`/users/${userId}/locations/grouped-by-parent`, {params: new HttpParams().set('pageIndex', pageIndex).set('pageSize', pageSize)});
+    }
+
+    getUserParentLocations(userId: string, pageIndex: number, pageSize: number): Observable<UserParentLocationsResponse> {
+        return this.http.get<UserParentLocationsResponse>(`/users/${userId}/locations/parent`, {params: new HttpParams().set('pageIndex', pageIndex).set('pageSize', pageSize)});
+    }
+
+    getLocationSublocations(locationId: string, skip: number, take: number): Observable<LocationChildrenResponse> {
+        return this.http.get<LocationChildrenResponse>(`/api/locations/${locationId}/sublocations`, {params: new HttpParams().set('skip', skip).set('take', take)});
     }
 
     addAccessibleLocation(request: ToggleAccessibleLocationRequest): Observable<void> {

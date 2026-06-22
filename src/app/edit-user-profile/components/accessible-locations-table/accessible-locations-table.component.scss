@@ -5,19 +5,12 @@
   background: #fff;
 }
 
-.locations-table__parent, .locations-table__sub {
+.locations-table__parent {
   display: flex;
   align-items: center;
   min-height: 48px;
   gap: 8px;
   border-bottom: 1px solid #e5edf7;
   padding: 0 16px;
-}
-
-.locations-table__parent {
   background: #f8fafc;
-}
-
-.locations-table__sub {
-  padding-left: 56px;
 }

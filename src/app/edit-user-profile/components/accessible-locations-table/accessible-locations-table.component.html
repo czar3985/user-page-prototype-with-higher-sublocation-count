@@ -1,17 +1,17 @@
 <div class="locations-table">
-    @for (location of groupedLocations?.data ?? []; track location.id) {
+    @for (location of userParentLocations?.data ?? []; track location.id) {
         <div class="locations-table__parent">
             <mat-checkbox (change)="locationToggled.emit({ locationId: location.id, linked: $event.checked })"
-                          [checked]="location.isLinkedToUser"/>
-            <strong>{{ location.name }}</strong></div>
-        @for (sub of location.sublocations; track sub.id) {
-            <div class="locations-table__sub">
-                <mat-checkbox (change)="sublocationToggled.emit({ locationId: sub.id, linked: $event.checked })"
-                              [checked]="sub.isLinkedToUser"/>
-                <span>{{ sub.name }}</span></div>
-        }
+                          [checked]="true"/>
+            <strong>{{ location.name }}</strong>
+        </div>
+        <app-sublocations-inner-table
+                (loadMore)="sublocationsLoadRequested.emit($event)"
+                (sublocationToggled)="sublocationToggled.emit($event)"
+                [locationId]="location.id"
+                [sublocationsState]="sublocationsMap[location.id]"/>
     }
 </div>
-<mat-paginator (page)="pageChanged.emit($event)" [length]="groupedLocations?.totalCount ?? 0"
-               [pageIndex]="groupedLocations?.pageIndex ?? 0" [pageSizeOptions]="[5, 10, 25]"
-               [pageSize]="groupedLocations?.pageSize ?? 5"/>
+<mat-paginator (page)="pageChanged.emit($event)" [length]="userParentLocations?.totalCount ?? 0"
+               [pageIndex]="userParentLocations?.pageIndex ?? 0" [pageSizeOptions]="[5, 10, 25]"
+               [pageSize]="userParentLocations?.pageSize ?? 5"/>

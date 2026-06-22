@@ -1,6 +1,11 @@
 import {fakeAsync, TestBed, tick} from '@angular/core/testing';
 import {of} from 'rxjs';
-import {MOCK_ACCESSIBLE_LOCATION_SEARCH, MOCK_GROUPED_LOCATIONS, MOCK_PRIMARY_LOCATION_SEARCH, MOCK_USER_PROFILE} from '../mocks/edit-user-profile.mock';
+import {
+    MOCK_ACCESSIBLE_LOCATION_SEARCH,
+    MOCK_PRIMARY_LOCATION_SEARCH,
+    MOCK_USER_PARENT_LOCATIONS,
+    MOCK_USER_PROFILE
+} from '../mocks/edit-user-profile.mock';
 import {EditUserProfileService} from './edit-user-profile.service';
 import {EditUserProfileFacade} from './edit-user-profile-facade.service';
 
@@ -8,9 +13,9 @@ describe('EditUserProfileFacade', () => {
     let facade: EditUserProfileFacade;
     let api: jasmine.SpyObj<EditUserProfileService>;
     beforeEach(() => {
-        api = jasmine.createSpyObj('EditUserProfileService', ['getUserProfile', 'getGroupedLocations', 'searchPrimaryLocations', 'searchLocations', 'updateUserProfile', 'addAccessibleLocation', 'removeAccessibleLocation']);
+        api = jasmine.createSpyObj('EditUserProfileService', ['getUserProfile', 'getUserParentLocations', 'searchPrimaryLocations', 'searchLocations', 'updateUserProfile', 'addAccessibleLocation', 'removeAccessibleLocation']);
         api.getUserProfile.and.returnValue(of(MOCK_USER_PROFILE));
-        api.getGroupedLocations.and.returnValue(of(MOCK_GROUPED_LOCATIONS));
+        api.getUserParentLocations.and.returnValue(of(MOCK_USER_PARENT_LOCATIONS));
         api.searchPrimaryLocations.and.returnValue(of(MOCK_PRIMARY_LOCATION_SEARCH));
         api.searchLocations.and.returnValue(of(MOCK_ACCESSIBLE_LOCATION_SEARCH));
         api.updateUserProfile.and.returnValue(of(MOCK_USER_PROFILE));
@@ -29,7 +34,7 @@ describe('EditUserProfileFacade', () => {
         facade.state$.subscribe((state) => {
             if (state.user) {
                 expect(state.user.firstName).toBe('Avery');
-                expect(state.groupedLocations?.data.length).toBe(5);
+                expect(state.userParentLocations?.data.length).toBe(5);
                 done();
             }
         });
